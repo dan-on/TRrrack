@@ -1,5 +1,5 @@
 import { IEventLogger } from './logger.interface';
-import { IEvent } from '../interfaces/event.interface';
+import { IEvent } from '../events/event.interface';
 
 export class MemoryEventLogger implements IEventLogger {
 
