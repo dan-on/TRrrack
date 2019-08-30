@@ -3,7 +3,7 @@ import * as fastify from 'fastify';
 import { registerHandlers } from './track';
 import { TrackService } from './track/track.service';
 import { RedisClient } from 'redis';
-import { RedisEventLogger } from 'track/event-loggers/redis.event-logger';
+import { RedisEventLogger } from 'track/loggers/redis.logger';
 
 async function bootstrap() {
   

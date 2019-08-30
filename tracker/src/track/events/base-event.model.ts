@@ -1,25 +1,52 @@
 import { IEvent } from "./event.interface";
 import { EventType } from "./event-type.enum";
-import { DefaultHeaders, DefaultQuery, DefaultParams } from "fastify";
+import { DefaultHeaders, DefaultQuery, DefaultParams, FastifyRequest } from "fastify";
+import { FastifyCookieOptions } from 'fastify-cookie';
+import { IExplorer } from "track/explorers/explorer.interface";
+import { IExplorable } from "track/explorers/explorable.interface";
 
 export class BaseEvent implements IEvent {
+
   id: string;
   time: number;
+  headers: DefaultHeaders;
+  query: DefaultQuery;
+  params: DefaultParams;
+  cookies: object;
+  explored: Map<string, object>;
 
-  constructor(
-    public type: EventType,
-    public headers: DefaultHeaders, 
-    public query: DefaultQuery, 
-    public params: DefaultParams, 
-    public cookies: Object) {
-
+  constructor(public type: EventType) {
     const now = Date.now();
     this.id = this.generateId(now);
     this.time = now;
   }
 
   /**
-   * Genetate 16-digits ID
+   * Initialize event from request object
+   */
+  public fromRequest(request: FastifyRequest<FastifyCookieOptions>) {
+    
+    this.headers = request.headers;
+    this.query = request.query;
+    this.params = request.params;
+    this.cookies = request.cookies;
+
+    return this;
+  }
+
+  /**
+   * Explore event data with explorers
+   */
+  public async explore(explorers: IExplorer[]): Promise<IEvent> {
+  
+    const exploredData = await Promise.all(explorers.map(e => e.explore(this)));
+    this.explored = new Map(explorers.map((e, index) => [e.property, exploredData[index]]));
+    
+    return this;
+  }
+
+  /**
+   * Generate 16-digits ID
    */
   private generateId(time: number): string {
     
@@ -30,7 +57,7 @@ export class BaseEvent implements IEvent {
     if(encodedDate.length !== 5) throw new Error('Wrong event time');
 
     return [
-      this.encodeDate, // 5 digits
+      encodedDate, // 5 digits
       this.randomKey(firstKeyMaxInt), // 6 digits
       this.randomKey(secondKeyMaxInt), // 5 digits
     ].join('');

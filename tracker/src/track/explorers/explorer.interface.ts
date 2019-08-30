@@ -1,3 +1,8 @@
+import { IEvent } from "track/events/event.interface";
+
 export interface IExplorer {
-  explore()
+  
+  property: string;
+  
+  explore(event: IEvent)
 }
