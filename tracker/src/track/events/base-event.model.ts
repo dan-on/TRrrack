@@ -40,8 +40,9 @@ export class BaseEvent implements IEvent {
   public async explore(explorers: IExplorer[]): Promise<IEvent> {
   
     const exploredData = await Promise.all(explorers.map(e => e.explore(this)));
-    this.explored = new Map(explorers.map((e, index) => [e.property, exploredData[index]]));
-    
+    const mapped = string[][] explorers.map((e, index) => [e.property, exploredData[index]]);
+    this.explored = new Map(mapped);
+    new Map([[1,2], [1,3]])
     return this;
   }
 
