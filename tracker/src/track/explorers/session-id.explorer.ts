@@ -1,20 +1,20 @@
 import { IEvent } from "track/events/event.interface";
 
-export class UserIdExplorer {
+export class SessionIdExplorer {
 
-  property = "userId";
+  property = "sessionId";
 
   async explore(event: IEvent) {
     
-    if('uid' in event.cookies) {
+    if('sid' in event.cookies) {
       return {
-        id: event.cookies['uid'],
+        id: event.cookies['sid'],
         isNewlyGenerated: false
       }
     }
     
     return {
-      id: this.generateUserId(),
+      id: this.generateSessionId(),
       isNewlyGenerated: true
     }
   }
@@ -22,7 +22,7 @@ export class UserIdExplorer {
   /**
    * Generate 8-digits unique id
    */
-  private generateUserId() {
+  private generateSessionId() {
     
     const maxInt = 2821109907455; // Or: parseInt('zzzzzzzz', 36);
 

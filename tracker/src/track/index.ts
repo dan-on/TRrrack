@@ -7,6 +7,7 @@ import { ImpressionEvent } from './events/impression-event.model';
 import { ClickEvent } from './events/click-event.model';
 import { UserIdExplorer } from './explorers/user-id.explorer';
 import { TransitionEvent } from './events/transition-event.model';
+import { SessionIdExplorer } from './explorers/session-id.explorer';
 
 export async function registerHandlers (fastify, opts) {
   // Update our property
@@ -28,6 +29,7 @@ const GIF_PIXEL_BUFF = Buffer.from([
 
 const EXPLORERS = [
   new UserIdExplorer(),
+  new SessionIdExplorer()
 ];
 
 const impressionHandler = async function(request: FastifyRequest<IncomingMessage>, reply: FastifyReply<ServerResponse>) {

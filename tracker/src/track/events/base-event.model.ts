@@ -59,17 +59,19 @@ export class BaseEvent implements IEvent {
 
     return [
       encodedDate, // 5 digits
-      this.randomKey(firstKeyMaxInt), // 6 digits
-      this.randomKey(secondKeyMaxInt), // 5 digits
+      this.randomKey(11), // 11 digits
     ].join('');
   }
 
   /**
-   * Generate base36 encoded string from random integer between 0 and maxInt
-   * @param maxInt
+   * Generate base36 encoded string
+   * @param length
    */
-  private randomKey(maxInt: number): string {
-    return Math.floor(Math.random() * maxInt).toString(36).padStart(6, '0');
+  private randomKey(length: number): string {
+    const maxInt = Math.pow(36, length) - 1;
+    return Math.floor(Math.random() * maxInt)
+      .toString(36)
+      .padStart(length, '0');
   }
 
   /**
