@@ -1,8 +1,9 @@
 import { IEvent } from "track/events/event.interface";
+import { IExplorer } from "./explorer.interface";
 
 export interface IExplorable {
   
-  explored;
+  explored: Map<string, object>;
 
-  explore(): Promise<IEvent>;
+  explore(explorers: IExplorer[]): Promise<IEvent>;
 }

@@ -1,4 +1,4 @@
-import { EventType } from "./event-type.enum";
+import { EventType } from "../enum/event-type.enum";
 import { DefaultHeaders, DefaultQuery, DefaultParams } from "fastify";
 
 export interface IEvent {

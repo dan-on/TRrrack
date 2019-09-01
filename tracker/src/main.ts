@@ -16,6 +16,9 @@ async function bootstrap() {
   
   // Bootstrap tracking service
   const trackService = new TrackService(eventWriter);
+  trackService.useExplorers([
+    // ...
+  ]);
 
   // Bootstrap config service
   const configService = new ConfigService();

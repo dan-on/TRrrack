@@ -1,14 +1,17 @@
 import { IEvent } from "./event.interface";
-import { EventType } from "./event-type.enum";
+import { EventType } from "../enum/event-type.enum";
 import { DefaultHeaders, DefaultQuery, DefaultParams, FastifyRequest } from "fastify";
 import { FastifyCookieOptions } from 'fastify-cookie';
 import { IExplorer } from "track/explorers/explorer.interface";
 import { IExplorable } from "track/explorers/explorable.interface";
 
-export class BaseEvent implements IEvent {
+export class BaseEvent implements IEvent, IExplorable {
 
   id: string;
   time: number;
+  sid: string;
+  uid: string;
+  ip: string;
   headers: DefaultHeaders;
   query: DefaultQuery;
   params: DefaultParams;
@@ -19,6 +22,7 @@ export class BaseEvent implements IEvent {
     const now = Date.now();
     this.id = this.generateId(now);
     this.time = now;
+    this.explored = new Map();
   }
 
   /**
@@ -26,6 +30,9 @@ export class BaseEvent implements IEvent {
    */
   public fromRequest(request: FastifyRequest<FastifyCookieOptions>) {
     
+    this.uid = request['uid'];
+    this.sid = request['sid'];
+    this.ip = request.ip;
     this.headers = request.headers;
     this.query = request.query;
     this.params = request.params;
@@ -38,11 +45,10 @@ export class BaseEvent implements IEvent {
    * Explore event data with explorers
    */
   public async explore(explorers: IExplorer[]): Promise<IEvent> {
-  
     const exploredData = await Promise.all(explorers.map(e => e.explore(this)));
-    const mapped = string[][] explorers.map((e, index) => [e.property, exploredData[index]]);
-    this.explored = new Map(mapped);
-    new Map([[1,2], [1,3]])
+    exploredData.forEach((val, index) => {
+      this.explored[explorers[index].property] = val
+    });
     return this;
   }
 
@@ -52,26 +58,25 @@ export class BaseEvent implements IEvent {
   private generateId(time: number): string {
     
     const encodedDate = this.encodeDate(time);
-    const firstKeyMaxInt = 2176782335; // Or: parseInt('zzzzzz', 36);
-    const secondKeyMaxInt = 60466175; // Or: parseInt('zzzzz', 36);
-    
+    const randomKey = this.randomKey();
+
     if(encodedDate.length !== 5) throw new Error('Wrong event time');
 
     return [
-      encodedDate, // 5 digits
-      this.randomKey(11), // 11 digits
+      encodedDate,  // 5 digits
+      randomKey,    // 11 digits
     ].join('');
   }
 
   /**
-   * Generate base36 encoded string
+   * Generate 11-digits base36 encoded string. Limit 
    * @param length
    */
-  private randomKey(length: number): string {
-    const maxInt = Math.pow(36, length) - 1;
+  private randomKey(): string {
+    const maxInt = Math.pow(36, 11) - 1;
     return Math.floor(Math.random() * maxInt)
       .toString(36)
-      .padStart(length, '0');
+      .padStart(11, '0');
   }
 
   /**
