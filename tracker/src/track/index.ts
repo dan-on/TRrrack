@@ -1,5 +1,4 @@
 import { clickSchema, transitionSchema, conversionSchema, impressionSchema } from './schemas';
-import { readFileSync } from 'fs';
 import * as handlers from './handlers';
 import { attachUserId, attachSessionId } from './pre-handlers';
 
