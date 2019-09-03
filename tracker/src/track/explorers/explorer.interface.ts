@@ -4,5 +4,5 @@ export interface IExplorer {
   
   property: string;
   
-  explore(event: IEvent)
+  explore(event: IEvent): Promise<any>;
 }

@@ -3,9 +3,8 @@ import { EventType } from "../enum/event-type.enum";
 import { DefaultHeaders, DefaultQuery, DefaultParams, FastifyRequest } from "fastify";
 import { FastifyCookieOptions } from 'fastify-cookie';
 import { IExplorer } from "track/explorers/explorer.interface";
-import { IExplorable } from "track/explorers/explorable.interface";
 
-export class BaseEvent implements IEvent, IExplorable {
+export class BaseEvent implements IEvent {
 
   id: string;
   time: number;
@@ -16,7 +15,7 @@ export class BaseEvent implements IEvent, IExplorable {
   query: DefaultQuery;
   params: DefaultParams;
   cookies: object;
-  explored: Map<string, object>;
+  explored: Map<string, any>;
 
   constructor(public type: EventType) {
     const now = Date.now();
@@ -44,7 +43,7 @@ export class BaseEvent implements IEvent, IExplorable {
   /**
    * Explore event data with explorers
    */
-  public async explore(explorers: IExplorer[]): Promise<IEvent> {
+  public async explore(explorers: IExplorer[]): Promise<any> {
     const exploredData = await Promise.all(explorers.map(e => e.explore(this)));
     exploredData.forEach((val, index) => {
       this.explored[explorers[index].property] = val
