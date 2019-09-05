@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { IncomingMessage, ServerResponse } from "http";
-import { ImpressionEvent, ClickEvent, TransitionEvent } from "./events";
+import { ImpressionEvent, ClickEvent, TransitionEvent } from "./models";
 import { RedirectType } from "./enum/redirect-type.enum";
 import { readFileSync } from 'fs';
 

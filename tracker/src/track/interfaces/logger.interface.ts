@@ -1,4 +1,4 @@
-import { IEvent } from '../events/event.interface';
+import { IEvent } from './event.interface';
 
 export interface IEventLogger {
   

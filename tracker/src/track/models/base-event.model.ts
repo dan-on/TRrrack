@@ -1,8 +1,8 @@
-import { IEvent } from "./event.interface";
+import { IEvent } from "../interfaces/event.interface";
 import { EventType } from "../enum/event-type.enum";
 import { DefaultHeaders, DefaultQuery, DefaultParams, FastifyRequest } from "fastify";
 import { FastifyCookieOptions } from 'fastify-cookie';
-import { IExplorer } from "track/explorers/explorer.interface";
+import { IResolver } from "track/interfaces/resolver.interface";
 
 export class BaseEvent implements IEvent {
 
@@ -41,12 +41,12 @@ export class BaseEvent implements IEvent {
   }
 
   /**
-   * Explore event data with explorers
+   * Resolve event data
    */
-  public async explore(explorers: IExplorer[]): Promise<any> {
-    const exploredData = await Promise.all(explorers.map(e => e.explore(this)));
+  public async resolve(resolvers: IResolver[]): Promise<any> {
+    const exploredData = await Promise.all(resolvers.map(e => e.resolve(this)));
     exploredData.forEach((val, index) => {
-      this.explored[explorers[index].property] = val
+      this.explored[resolvers[index].property] = val
     });
     return this;
   }

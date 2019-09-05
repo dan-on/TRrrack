@@ -1,5 +1,5 @@
-import { IEventLogger } from './logger.interface';
-import { IEvent } from '../events/event.interface';
+import { IEventLogger } from '../interfaces/logger.interface';
+import { IEvent } from '../interfaces/event.interface';
 import { RedisClient } from 'redis';
 import * as util from 'util';
 

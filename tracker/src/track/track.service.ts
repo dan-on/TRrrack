@@ -1,20 +1,20 @@
-import { IEvent } from './events/event.interface';
-import { IEventLogger } from './loggers/logger.interface';
-import { IExplorer } from './explorers/explorer.interface';
-import { IExplorable } from './explorers/explorable.interface';
+import { IEvent } from './interfaces/event.interface';
+import { IEventLogger } from './interfaces/logger.interface';
+import { IResolver } from './interfaces/resolver.interface';
+import { BaseEvent } from './models';
 
 export class TrackService {
 
-  private explorers: IExplorer[] = [];
+  private resolvers: IResolver[] = [];
 
   constructor(private readonly eventWriter: IEventLogger) {}
   
-  useExplorers(explorers: IExplorer[]): void {
-    this.explorers = explorers;
+  useResolvers(resolvers: IResolver[]): void {
+    this.resolvers = resolvers;
   }
 
-  exploreEvent(event: IExplorable) {
-    return event.explore(this.explorers);
+  resolveEvent(event: BaseEvent) {
+    return event.resolve(this.resolvers);
   }
 
   pushEvent(event: IEvent) {

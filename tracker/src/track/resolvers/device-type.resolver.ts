@@ -1,8 +1,8 @@
-import { IEvent } from "track/events/event.interface";
-import { IExplorer } from "./explorer.interface";
+import { IEvent } from "track/interfaces/event.interface";
+import { IResolver } from "../interfaces/resolver.interface";
 import * as parser from 'ua-parser-js';
 
-export class DeviceTypeExplorer implements IExplorer {
+export class DeviceTypeResolver implements IResolver {
   
   property: string;
   
@@ -11,7 +11,7 @@ export class DeviceTypeExplorer implements IExplorer {
    * @param event 
    * @example https://github.com/faisalman/ua-parser-js#Methods
    */
-  async explore(event: IEvent): Promise<any> {
+  async resolve(event: IEvent): Promise<any> {
     return parser(event.headers['user-agent']);
   }
 }

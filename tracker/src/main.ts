@@ -4,7 +4,7 @@ import { registerHandlers } from './track';
 import { TrackService } from './track/track.service';
 import { RedisClient } from 'redis';
 import { RedisEventLogger } from 'track/loggers/redis.logger';
-import { DeviceTypeExplorer } from 'track/explorers/device-type.explorer';
+import { DeviceTypeResolver } from 'track/resolvers/device-type.resolver';
 
 async function bootstrap() {
   
@@ -17,8 +17,8 @@ async function bootstrap() {
   
   // Bootstrap tracking service
   const trackService = new TrackService(eventWriter);
-  trackService.useExplorers([
-    DeviceTypeExplorer
+  trackService.useResolvers([
+    new DeviceTypeResolver()
   ]);
 
   // Bootstrap config service
