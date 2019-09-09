@@ -10,8 +10,6 @@ const GIF_PIXEL_BUFF = Buffer.from([
   0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 
   0x02, 0x44, 0x01, 0x00, 0x3b]);
 
-const PROXYPAGE_TPL = readFileSync('./src/track/static/proxypage.html')
-
 export async function impressionHandler (request: FastifyRequest<IncomingMessage>, reply: FastifyReply<ServerResponse>) {
   const campaign = request.params.campaign;
   const event = (new ImpressionEvent(campaign)).fromRequest(request)
@@ -34,10 +32,10 @@ export async function clickHandler(request: FastifyRequest<IncomingMessage>, rep
     case RedirectType.Location: 
       reply.redirect(targetUrl);
       break;
-    case RedirectType.ProxyPage:
-      reply
-        .header('Content-Type', 'text/html; charset=utf-8')
-        .send(PROXYPAGE_TPL)
+    // case RedirectType.ProxyPage:
+    //   reply
+    //     .header('Content-Type', 'text/html; charset=utf-8')
+    //     .send(PROXYPAGE_TPL)
       break;
     default:
       throw new Error('Unknown redirect type');
