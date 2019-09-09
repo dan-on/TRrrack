@@ -1,0 +1,15 @@
+version: '3'
+services:
+  tracker:
+    env_file: .env
+    build:
+      context: tracker
+      dockerfile: Dockerfile
+    volumes:
+      - ./maintenance/db:/usr/app/db
+    links:
+      - cache:cache
+    depends_on:
+      - cache
+  cache:
+      image: redis:5-alpine

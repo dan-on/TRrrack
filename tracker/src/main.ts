@@ -5,13 +5,17 @@ import { TrackService } from './track/track.service';
 import { RedisClient } from 'redis';
 import { RedisEventLogger } from 'track/loggers/redis.logger';
 import { DeviceTypeResolver } from 'track/resolvers/device-type.resolver';
+import { config } from 'dotenv';
 
 async function bootstrap() {
+
+  // Bootstrap config service
+  const configService = new ConfigService();
   
   // Bootstrap event writer (redis by default)
   const redisClient = new RedisClient({
-    host: 'localhost',
-    port: 6379
+    host: configService.get('REDIS_HOST'),
+    port: +configService.get('REDIS_PORT')
   });
   const eventWriter = new RedisEventLogger(redisClient);
   
@@ -21,9 +25,6 @@ async function bootstrap() {
     new DeviceTypeResolver()
   ]);
 
-  // Bootstrap config service
-  const configService = new ConfigService();
-  
   // Initialize Fastify server
   const server = fastify({
     "maxParamLength": 2048,
@@ -35,7 +36,7 @@ async function bootstrap() {
   server.decorate('configService', configService);
   
   server.register(registerHandlers, { prefix: '/' });
-  await server.listen(3001, '0.0.0.0');
+  await server.listen(3000, '0.0.0.0');
   console.log('Track Server Started');
 }
 

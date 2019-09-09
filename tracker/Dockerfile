@@ -12,10 +12,10 @@ RUN npm install
 # If you are building your code for production
 # RUN npm install --only=production
 
-COPY config.js config.js
+COPY tsconfig.json tsconfig.json
 
 # Bundle app source
 COPY src src
 
-CMD npm run ${ENV}
-EXPOSE ${DIRECTOR_LOCAL_PORT}
+CMD npm run start
+EXPOSE 3000
