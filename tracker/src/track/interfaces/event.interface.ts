@@ -3,6 +3,7 @@ import { DefaultHeaders, DefaultQuery, DefaultParams } from "fastify";
 
 export interface IEvent {
   id: string;
+  ip: string;
   type: EventType;
   time: number;
   headers: DefaultHeaders;

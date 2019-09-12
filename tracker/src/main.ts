@@ -4,8 +4,9 @@ import { registerHandlers } from './track';
 import { TrackService } from './track/track.service';
 import { RedisClient } from 'redis';
 import { RedisEventLogger } from 'track/loggers/redis.logger';
-import { DeviceTypeResolver } from 'track/resolvers/device-type.resolver';
-import { config } from 'dotenv';
+import { UaParserResolver } from 'track/resolvers/uaparser.resolver';
+import maxmind, { CityResponse } from 'maxmind';
+import { MaxmindGeoResolver } from 'track/resolvers/maxmind-geo.resolver';
 
 async function bootstrap() {
 
@@ -21,8 +22,14 @@ async function bootstrap() {
   
   // Bootstrap tracking service
   const trackService = new TrackService(eventWriter);
+
+  // Init resolvers
+  const maxmindCityDbPath = configService.get('MAXMIND_CITY_DB_PATH');
+  const cityLookup = await maxmind.open<CityResponse>(maxmindCityDbPath);
+  
   trackService.useResolvers([
-    new DeviceTypeResolver()
+    new UaParserResolver(),
+    new MaxmindGeoResolver(cityLookup),
   ]);
 
   // Initialize Fastify server
