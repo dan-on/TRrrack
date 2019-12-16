@@ -1,8 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { IncomingMessage, ServerResponse } from "http";
-import { ImpressionEvent, ClickEvent, TransitionEvent } from "./models";
 import { RedirectType } from "./enum/redirect-type.enum";
-import { readFileSync } from 'fs';
+import { BaseEvent } from "./models";
 
 const GIF_PIXEL_BUFF = Buffer.from([
   0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 
@@ -12,7 +11,7 @@ const GIF_PIXEL_BUFF = Buffer.from([
 
 export async function impressionHandler (request: FastifyRequest<IncomingMessage>, reply: FastifyReply<ServerResponse>) {
   const campaign = request.params.campaign;
-  const event = (new ImpressionEvent(campaign)).fromRequest(request)
+  const event = (new BaseEvent(campaign)).fromRequest(request)
   await this.trackService.exploreEvent(event);
   
   // Write impression event
@@ -23,7 +22,7 @@ export async function impressionHandler (request: FastifyRequest<IncomingMessage
 export async function clickHandler(request: FastifyRequest<IncomingMessage>, reply: FastifyReply<ServerResponse>) {
   const campaign = request.params.campaign;
   
-  const event = (new ClickEvent(campaign)).fromRequest(request)
+  const event = (new BaseEvent(campaign)).fromRequest(request)
   await this.trackService.exploreEvent(event);
   const targetUrl = 'https://google.com/';
   let redirectType = 1
@@ -48,7 +47,7 @@ export async function clickHandler(request: FastifyRequest<IncomingMessage>, rep
 export async function transitionHandler (request: FastifyRequest<IncomingMessage>, reply: FastifyReply<ServerResponse>) {
 
   const url = request.params.url;
-  const event = (new TransitionEvent(url)).fromRequest(request);
+  const event = (new BaseEvent(url)).fromRequest(request);
   await this.trackService.exploreEvent(event);
 
   const targetUrl = this.trackService.buildTargetUrl(request.query.target);
