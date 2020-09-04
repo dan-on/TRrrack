@@ -13,7 +13,7 @@
   "dependencies": {
     "@types/redis": "^2.8.13",
     "dotenv": "^8.0.0",
-    "fastify": "^2.3.0",
+    "fastify": "^2.15.1",
     "fastify-cookie": "^3.0.2",
     "ip-set": "^1.0.2",
     "maxmind": "^3.1.2",
