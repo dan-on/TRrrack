@@ -18,7 +18,7 @@
     "ip-set": "^1.0.2",
     "maxmind": "^3.1.2",
     "redis": "^2.8.0",
-    "ua-parser-js": "^0.7.20"
+    "ua-parser-js": "^0.7.24"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
